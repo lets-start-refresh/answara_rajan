@@ -59,7 +59,7 @@ if len(LOG_CHANNEL) == 0:
     exit()
 else:
     LOG_CHANNEL = int(LOG_CHANNEL)
-    
+
 # support group
 SUPPORT_GROUP = environ.get('SUPPORT_GROUP', '')
 if len(SUPPORT_GROUP) == 0:
@@ -83,25 +83,25 @@ if len(SECOND_FILES_DATABASE_URL) == 0:
 DATABASE_NAME = environ.get('DATABASE_NAME', "Cluster0")
 COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Files')
 
-# Links
-SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/HA_Bots_Support')
-UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/HA_Bots')
-FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/HA_Films_World')
-TUTORIAL = environ.get("TUTORIAL", "https://t.me/HA_Bots")
-VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/HA_Bots")
+# Links — set via environment variables
+SUPPORT_LINK = environ.get('SUPPORT_LINK', 'https://t.me/your_support_group')
+UPDATES_LINK = environ.get('UPDATES_LINK', 'https://t.me/your_updates_channel')
+FILMS_LINK = environ.get('FILMS_LINK', 'https://t.me/your_films_channel')
+TUTORIAL = environ.get("TUTORIAL", "https://t.me/your_updates_channel")
+VERIFY_TUTORIAL = environ.get("VERIFY_TUTORIAL", "https://t.me/your_updates_channel")
 
 # Bot settings
-TIME_ZONE = environ.get('TIME_ZONE', 'Asia/Colombo') # Replace your time zone
-DELETE_TIME = int(environ.get('DELETE_TIME', 3600)) # Add time in seconds
+TIME_ZONE = environ.get('TIME_ZONE', 'Asia/Kolkata')
+DELETE_TIME = int(environ.get('DELETE_TIME', 3600))
 CACHE_TIME = int(environ.get('CACHE_TIME', 300))
 MAX_BTN = int(environ.get('MAX_BTN', 8))
 LANGUAGES = [language.lower() for language in environ.get('LANGUAGES', 'hindi english telugu tamil kannada malayalam marathi punjabi').split()]
 QUALITY = [quality.lower() for quality in environ.get('QUALITY', '360p 480p 720p 1080p 2160p').split()]
 IMDB_TEMPLATE = environ.get("IMDB_TEMPLATE", script.IMDB_TEMPLATE)
 FILE_CAPTION = environ.get("FILE_CAPTION", script.FILE_CAPTION)
-SHORTLINK_URL = environ.get("SHORTLINK_URL", "mdiskshortner.link")
-SHORTLINK_API = environ.get("SHORTLINK_API", "36f1ae74ba1aa01e5bd73bdd0bc22aa915443501")
-VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 86400)) # Add time in seconds
+SHORTLINK_URL = environ.get("SHORTLINK_URL", "linkpays.in")
+SHORTLINK_API = environ.get("SHORTLINK_API", "")
+VERIFY_EXPIRE = int(environ.get('VERIFY_EXPIRE', 86400))
 WELCOME_TEXT = environ.get("WELCOME_TEXT", script.WELCOME_TEXT)
 INDEX_EXTENSIONS = [extensions.lower() for extensions in environ.get('INDEX_EXTENSIONS', 'mp4 mkv').split()]
 PM_FILE_DELETE_TIME = int(environ.get('PM_FILE_DELETE_TIME', '3600'))
@@ -116,7 +116,7 @@ LONG_IMDB_DESCRIPTION = is_enabled("LONG_IMDB_DESCRIPTION", False)
 LINK_MODE = is_enabled("LINK_MODE", True)
 IMDB = is_enabled('IMDB', True)
 SPELL_CHECK = is_enabled("SPELL_CHECK", True)
-SHORTLINK = is_enabled('SHORTLINK', False)
+SHORTLINK = is_enabled('SHORTLINK', False)  # Shortlink OFF by default
 
 # for stream
 IS_STREAM = is_enabled('IS_STREAM', True)
@@ -140,22 +140,20 @@ else:
         logger.error('URL is not valid, exiting now')
         exit()
 
-#start command reactions and sticker
-REACTIONS = [reactions for reactions in environ.get('REACTIONS', '🤝 😇 🤗 😍 👍 🎅 😐 🥰 🤩 😱 🤣 😘 👏 😛 😈 🎉 ⚡️ 🫡 🤓 😎 🏆 🔥 🤭 🌚 🆒 👻 😁').split()]  # Multiple reactions can be used separated by space
-STICKERS = [sticker for sticker in environ.get('STICKERS', 'CAACAgIAAxkBAAEN4ctnu1NdZUe21tiqF1CjLCZW8rJ28QACmQwAAj9UAUrPkwx5a8EilDYE CAACAgIAAxkBAAEN1pBntL9sz1tuP_qo0bCdLj_xQa28ngACxgEAAhZCawpKI9T0ydt5RzYE').split()]  # Multiple sticker can be used separated by space, use @idstickerbot for get sticker id
+# reactions and stickers
+REACTIONS = [reactions for reactions in environ.get('REACTIONS', '🤝 😇 🤗 😍 👍 🎅 😐 🥰 🤩 😱 🤣 😘 👏 😛 😈 🎉 ⚡️ 🫡 🤓 😎 🏆 🔥 🤭 🌚 🆒 👻 😁').split()]
+STICKERS = [sticker for sticker in environ.get('STICKERS', 'CAACAgIAAxkBAAEN4ctnu1NdZUe21tiqF1CjLCZW8rJ28QACmQwAAj9UAUrPkwx5a8EilDYE CAACAgIAAxkBAAEN1pBntL9sz1tuP_qo0bCdLj_xQa28ngACxgEAAhZCawpKI9T0ydt5RzYE').split()]
 
-
-# for Premium 
-IS_PREMIUM = is_enabled('IS_PREMIUM', True)
-PRE_DAY_AMOUNT = int(environ.get('PRE_DAY_AMOUNT', '10')) # add amount in INR for premium charge pre day 
+# Premium — disabled by default, enable via env var
+IS_PREMIUM = is_enabled('IS_PREMIUM', False)
+PRE_DAY_AMOUNT = int(environ.get('PRE_DAY_AMOUNT', '10'))
 UPI_ID = environ.get("UPI_ID", "")
 if len(UPI_ID) == 0:
     logger.info('UPI_ID is empty')
-UPI_NAME = environ.get("UPI_NAME", "") # add your UPI account name
+UPI_NAME = environ.get("UPI_NAME", "")
 if len(UPI_NAME) == 0:
     logger.info('UPI_NAME is empty')
-RECEIPT_SEND_USERNAME = environ.get("RECEIPT_SEND_USERNAME", "@Hansaka_Anuhas")
+RECEIPT_SEND_USERNAME = environ.get("RECEIPT_SEND_USERNAME", "")
 if len(UPI_ID) == 0 or len(UPI_NAME) == 0:
     logger.info('IS_PREMIUM disabled due to empty UPI_ID or UPI_NAME')
     IS_PREMIUM = False
-    
