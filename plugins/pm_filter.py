@@ -23,7 +23,7 @@ async def pm_search(client, message):
     if message.text.startswith("/"):
         return
     stg = db.get_bot_sttgs()
-    if not stg.get('PM_SEARCH'):
+    if not stg or not stg.get('PM_SEARCH'):
         return await message.reply_text('PM search was disabled!')
     if await is_premium(message.from_user.id, client):
         if not stg.get('AUTO_FILTER'):
@@ -48,7 +48,8 @@ async def group_search(client, message):
     chat_id = message.chat.id
     user_id = message.from_user.id if message and message.from_user else 0
     stg = db.get_bot_sttgs()
-    if stg.get('AUTO_FILTER'):
+    # Fix: handle None stg gracefully — default AUTO_FILTER to True if no settings exist
+    if stg is None or stg.get('AUTO_FILTER', True):
         if not user_id:
             await message.reply("I'm not working for anonymous admin!")
             return
@@ -598,8 +599,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await q.delete()
             await query.message.reply(f"Not valid photo, send your receipt to: {RECEIPT_SEND_USERNAME}")
 
-
-
     elif query.data == "start":
         buttons = [[
             InlineKeyboardButton("+ ᴀᴅᴅ ᴍᴇ ᴛᴏ ʏᴏᴜʀ ɢʀᴏᴜᴘ +", url=f'http://t.me/{temp.U_NAME}?startgroup=start')
@@ -718,12 +717,10 @@ async def cb_handler(client: Client, query: CallbackQuery):
         if not await is_check_admin(client, int(grp_id), userid):
             await query.answer("You not admin in this group.", show_alert=True)
             return
-
         if status == "True":
             await save_group_settings(int(grp_id), set_type, False)
         else:
             await save_group_settings(int(grp_id), set_type, True)
-
         btn = await get_grp_stg(int(grp_id))
         await query.message.edit_reply_markup(InlineKeyboardMarkup(btn))
             
@@ -807,7 +804,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ]]
         await query.message.edit('Successfully changed Welcome to default', reply_markup=InlineKeyboardMarkup(btn))
 
-    
     elif query.data.startswith("tutorial_setgs"):
         _, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
@@ -848,7 +844,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ]]
         await query.message.edit('Successfully changed tutorial link to default', reply_markup=InlineKeyboardMarkup(btn))
 
-    
     elif query.data.startswith("shortlink_setgs"):
         _, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
@@ -909,7 +904,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
         ]]
         await query.message.edit(f'Select you want option\n\nCurrent caption:\n{settings["caption"]}', reply_markup=InlineKeyboardMarkup(btn))
         
-        
     elif query.data.startswith("set_caption"):
         _, grp_id = query.data.split("#")
         userid = query.from_user.id if query.from_user else None
@@ -923,7 +917,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             InlineKeyboardButton('Back', callback_data=f'caption_setgs#{grp_id}')
         ]]
         await query.message.reply('Successfully changed caption', reply_markup=InlineKeyboardMarkup(btn))
-
 
     elif query.data.startswith("default_caption"):
         _, grp_id = query.data.split("#")
@@ -1068,7 +1061,6 @@ async def cb_handler(client: Client, query: CallbackQuery):
             await query.message.reply('Nothing to kick deleted accounts.')
 
 
-
 async def auto_filter(client, msg, s, spoll=False):
     if not spoll:
         message = msg
@@ -1083,7 +1075,7 @@ async def auto_filter(client, msg, s, spoll=False):
             return
     else:
         settings = await get_settings(msg.message.chat.id)
-        message = msg.message.reply_to_message  # msg will be callback query
+        message = msg.message.reply_to_message
         search, files, offset, total_results = spoll
     req = message.from_user.id if message and message.from_user else 0
     key = f"{message.chat.id}-{message.id}"
@@ -1257,4 +1249,3 @@ async def advantage_spell_chok(message, s):
         await message.delete()
     except:
         pass
-
