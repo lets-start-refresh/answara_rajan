@@ -6,7 +6,7 @@ shortzy
 aiohttp
 aiofiles
 speedtest-cli
-uvloop
+#uvloop
 requests
 qrcode
 Pillow
