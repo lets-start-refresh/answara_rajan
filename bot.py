@@ -107,5 +107,8 @@ class Bot(Client):
                 yield message
                 current += 1
 
+# Fix: create and set event loop before Bot() instantiation
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
 app = Bot()
 app.run()
