@@ -1,7 +1,19 @@
 services:
-  - name: auto-filter-bot
+  - name: answara-rajan
     type: web
     env: python
+    pythonVersion: "3.10.8"
     buildCommand: "pip install -r requirements.txt"
-    startCommand: "python bot.py"
+    startCommand: "python3 bot.py"
     plan: free
+```
+
+Click **Commit changes** → Render will auto-redeploy with Python 3.10.8 ✅
+
+---
+
+## Also Create `.python-version` File
+
+In your fork → **Add file** → **Create new file** → name it `.python-version` → content:
+```
+3.10.8
